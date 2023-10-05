@@ -16,7 +16,7 @@ Resources:
     Properties:
       Handler: app.generateEvent
       Runtime: nodejs18.x
-      CodeUri: .  # or specify an S3 URI if you're using an S3 bucket
+      CodeUri: s3://sqs-teja/your-lambda-code.zip # or specify an S3 URI if you're using an S3 bucket
       Events:
         Schedule:
           Type: Schedule
