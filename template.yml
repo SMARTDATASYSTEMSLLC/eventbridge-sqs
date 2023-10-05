@@ -38,7 +38,7 @@ Resources:
     Properties:
       Handler: app.generateEvent
       Runtime: nodejs18.x
-      CodeUri: .
+      CodeUri: s3://sqs-teja/event.zip
       Events:
         Schedule:
           Type: Schedule
