@@ -40,7 +40,7 @@ Resources:
         - Arn: !GetAtt MySqsQueue.Arn
           Id: "SQSqueue"
 
-  # Allow EventBridge to invoke SQS
+  # Allow EventBridge to invoke SQS 
   EventBridgeToToSqsPolicy:
     Type: AWS::SQS::QueuePolicy
     Properties:
