@@ -3,7 +3,7 @@ name: Deploy CloudFormation Stack
 on:
   push:
     branches:
-      - feature/cloudformationgit stack
+      - feature/cloudformationstack
 
 env:
   AWS_REGION: "us-east-1"  #Change to your desired AWS region 
