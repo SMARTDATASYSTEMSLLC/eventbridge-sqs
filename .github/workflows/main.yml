@@ -6,7 +6,7 @@ on:
       - feature/cloudformationstack
 
 env:
-  AWS_REGION: "us-east-1"  #Change to your desired AWS region 
+  AWS_REGION: "us-east-1"  #Change to your desired AWS regionS
 
 permissions:
   id-token: write   #This is required for requesting the JWT 
@@ -33,3 +33,4 @@ jobs:
             --template-file template.yml \
             --stack-name event-sqs \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+            --no-fail-on-empty-changeset
