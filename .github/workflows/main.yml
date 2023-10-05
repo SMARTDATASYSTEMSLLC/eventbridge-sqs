@@ -34,8 +34,3 @@ jobs:
             --template-file template.yml \
             --stack-name event-sqs \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-            
-      - name: Display SQS outputs
-        run: |
-          echo "SQS Queue Name: ${{ steps.deploy.outputs.SQSqueueName }}"
-          echo "SQS Queue ARN: ${{ steps.deploy.outputs.SQSqueueARN }}"

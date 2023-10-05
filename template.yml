@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Deploy EventBridge and SQS
+Description: Create EventBridge Rule and SQS Queue
 
 Resources:
   MySqsQueue:
@@ -12,6 +12,8 @@ Resources:
       EventPattern:
         source:
           - "custom.event"
+      ScheduleExpression: "rate(30 seconds)"
+      State: ENABLED
       Targets:
         - Arn: !GetAtt MySqsQueue.Arn
           Id: "SQSqueue"
