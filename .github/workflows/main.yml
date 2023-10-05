@@ -32,7 +32,7 @@ jobs:
           aws cloudformation package \
             --template-file template.yml \
             --output-template-file packaged-template.yml \
-            --s3-bucket sqs-teja-event1234567891233  # Replace with your S3 bucket name
+            --s3-bucket sqs-teja # Replace with your S3 bucket name
 
           aws cloudformation deploy \
             --template-file template.yml \
