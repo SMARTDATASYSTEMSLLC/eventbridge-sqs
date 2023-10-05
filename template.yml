@@ -35,7 +35,6 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: "EventRule"
-      EventBusName: !Ref MyEventBus  # Reference the EventBus created above
       ScheduleExpression: "rate(30 seconds)"  # Trigger every 30 seconds
       Targets:
         - Arn: !GetAtt MySqsQueue.Arn
