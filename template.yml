@@ -4,7 +4,7 @@ Description: Serverless patterns - EventBridge to SQS
 
 Resources:
 
-  # Define the SQS queue
+  # Define the SQS queue 
   MySqsQueue:
     Type: AWS::SQS::Queue
 
