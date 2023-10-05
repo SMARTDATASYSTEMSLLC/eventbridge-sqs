@@ -29,18 +29,13 @@ jobs:
 
       - name: Deploy CloudFormation stack
         run: |
-          aws cloudformation package \
-            --template-file template.yml \
-            --output-template-file packaged-template.yml \
-            --s3-bucket sqs-teja # Replace with your S3 bucket name
 
           aws cloudformation deploy \
             --template-file template.yml \
             --stack-name event-sqs \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
             --no-fail-on-empty-changeset
-      - name: Fetch stack events on failuree
+      - name: Display SQS outputs
         run: |
-          if [ $? -ne 0 ]; then
-            aws cloudformation describe-stack-events --stack-name event-sqs
-          fi
+          echo "SQS Queue Name: ${{ steps.deploy.outputs.SQSqueueName }}"
+          echo "SQS Queue ARN: ${{ steps.deploy.outputs.SQSqueueARN }}"
