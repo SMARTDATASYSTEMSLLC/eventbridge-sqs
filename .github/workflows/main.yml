@@ -29,6 +29,11 @@ jobs:
 
       - name: Deploy CloudFormation stack
         run: |
+          aws cloudformation package \
+            --template-file template.yml \
+            --output-template-file packaged-template.yml \
+            --s3-bucket sqs-teja-event1234567891233  # Replace with your S3 bucket name
+
           aws cloudformation deploy \
             --template-file template.yml \
             --stack-name event-sqs \
