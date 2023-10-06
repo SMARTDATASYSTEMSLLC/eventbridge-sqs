@@ -1,4 +1,40 @@
-# eventbridge-sqs
+**AWS EventBridge and SQS Deployment**
+Overview
+This CloudFormation template automates the deployment of an AWS infrastructure that includes an EventBridge rule and an SQS queue. The purpose is to facilitate the processing of events and messages within your AWS environment.
+
+Usage
+Clone the Repository:
+```
+git clone <repository-url>
+cd <repository-directory>
+```
+Update AWS Region:
+Open the template.yml file and ensure that the AWS_REGION in the GitHub Actions workflow section matches your desired AWS region.
+
+Configure AWS Credentials:
+Update the GitHub Actions workflow (workflow.yml) with the appropriate IAM role ARN to assume during deployment.
+
+Push to Feature Branch:
+The workflow is triggered on a push event to the feature/cloudformationstack branch. Ensure your changes are pushed to this branch.
+
+Monitor Deployment:
+The GitHub Actions workflow deploys the CloudFormation stack, creating an EventBridge rule and an SQS queue. Monitor the workflow for any deployment issues.
+
+Additional Notes
+EventBridge Rule Configuration:
+The MyEventRule in the CloudFormation template is configured to trigger on events with the source "custom.event". Modify the EventPattern section as needed to match your application's event structure.
+
+Application Source Requirement:
+As of the current configuration, the EventBridge rule triggers on a custom event source. To fully utilize this setup, ensure that your application generates events with the specified source to trigger EventBridge, which in turn sends messages to the SQS queue.
+
+Manual Event Trigger:
+In the absence of an automated application source, you can manually trigger events for testing purposes. Use the AWS Management Console or the AWS CLI to publish test events and observe the messages being sent to the SQS queue.
+
+Troubleshooting
+If you encounter issues during deployment, check the GitHub Actions workflow logs for error messages. Verify that AWS credentials are correctly configured, and the necessary IAM role permissions are in place.
+Feel free to customize the write-up based on your specific use case and deployment details. This should provide users with clear instructions on how to use the CloudFormation template and address the requirement for an application source to trigger EventBridge events.
+
+More Info on how the Template works:
 
 **CF TEMPLATE**
 
