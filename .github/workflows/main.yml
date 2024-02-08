@@ -34,3 +34,12 @@ jobs:
             --template-file template.yml \
             --stack-name event-sqs \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+
+      - name: Get SQS queue ARN
+        run: |
+            queue_arn=$(aws cloudformation describe-stacks \
+              --stack-name your-stack-name \
+              --query 'Stacks[0].Outputs[?OutputKey==`SQSqueueARN`].OutputValue' \
+              --output text)
+            echo "SQS Queue ARN: $queue_arn"
+
