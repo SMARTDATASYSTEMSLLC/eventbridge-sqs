@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS credentials and Assume Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::958686716208:role/Github  # Change to reflect your IAM role’s ARN
+          role-to-assume: arn:aws:iam::958686716208:role/testforgithubactions  # Change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
 
