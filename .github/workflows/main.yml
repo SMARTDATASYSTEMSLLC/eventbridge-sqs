@@ -38,7 +38,7 @@ jobs:
       - name: Get SQS queue ARN
         run: |
             queue_arn=$(aws cloudformation describe-stacks \
-              --stack-name your-stack-name \
+              --stack-name event-sqs \
               --query 'Stacks[0].Outputs[?OutputKey==`SQSqueueARN`].OutputValue' \
               --output text)
             echo "SQS Queue ARN: $queue_arn"
