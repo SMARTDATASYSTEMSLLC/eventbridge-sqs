@@ -1,8 +1,4 @@
 #
-# Copyright © 2024 Electrada, LLC. All rights reserved.
-#
-# A GitHub Actions workflow file to automate deploying AWS CDK stacks.
-#
 # See:
 # 1. https://git-scm.com/docs/git-config
 # 2. https://github.com/actions
