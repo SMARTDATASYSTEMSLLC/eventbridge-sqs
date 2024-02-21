@@ -1,0 +1,7 @@
+{
+  "source": "custom.event",
+  "detailType": "testEventType",
+  "detail": {
+    "message": "This is a test message."
+  }
+}

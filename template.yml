@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy EventBridge and SQS
+
+Resources:
+  MySqsQueue:
+    Type: AWS::SQS::Queue
+
+  MyEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "EventRule"
+      EventPattern:
+        source:
+          - "custom.event"
+      Targets:
+        - Arn: !GetAtt MySqsQueue.Arn
+          Id: "SQSqueue"
+
+Outputs:
+  SQSqueueName:
+    Description: SQS queue name
+    Value: !GetAtt MySqsQueue.QueueName
+
+  SQSqueueARN:
+    Description: SQS queue ARN
+    Value: !GetAtt MySqsQueue.Arn
