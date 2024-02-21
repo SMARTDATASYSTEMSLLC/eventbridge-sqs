@@ -1,45 +1,80 @@
-name: Deploy CloudFormation Stack
+#
+# Copyright © 2024 Electrada, LLC. All rights reserved.
+#
+# A GitHub Actions workflow file to automate deploying AWS CDK stacks.
+#
+# See:
+# 1. https://git-scm.com/docs/git-config
+# 2. https://github.com/actions
+# 3. https://github.com/actions/setup-python/issues/104
+# 4. https://github.com/aws-actions/configure-aws-credentials
+# 5. https://github.com/features/actions
+# 6. https://github.com/marketplace/actions/gitflow-workflow-action
+# 7. https://docs.github.com/en/actions
+# 8. https://docs.github.com/en/actions/learn-github-actions/expressions
+# 9. https://docs.github.com/en/actions/learn-github-actions/variables
+# 10. https://docs.github.com/en/actions/security-guides/using-secrets-in-github-
+#     actions
+# 11. https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-
+#    github-actions
+# 12. https://medium.com/geekculture/how-to-automate-aws-cdk-deployments-using-
+#     github-actions-cec5db24ca8d
+# 13. https://stackoverflow.com/questions/14214942/jinja2-shorthand-conditional
+# 14. https://stackoverflow.com/questions/58033366/how-to-get-the-current-
+#     branch-within-github-actions
 
 on:
-  push:
+  push:                          # Allow automatic triggering.
     branches:
-      - feature/cloudformationstack
+      - develop
+      - main
+  workflow_dispatch:             # Allow manual triggering.
+    branches:
+      - 'feature/**'
+      - develop
+      - main
+    tags:
+      - 'v*' # Trigger on tags like v1.0.0
+
+name: Deploy AWS CDK stack
 
 env:
-  AWS_REGION: "us-east-1"  #Change to your desired AWS regionS
+  SDLC_ENV: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && 'prod' || 'dev' }}
 
+
+# These permissions are needed to interact with GitHub's Open ID Connect (OIDC)
+# JSON Web Token (JWT) endpoint.
 permissions:
-  id-token: write   #This is required for requesting the JWT 
-  contents: read    # This is required for actions/checkout 
+  id-token: write  # This is required for requesting the JWT.
+  contents: read   # This is required for actions/checkout.
 
 jobs:
-  deploy:
+  AssumeRoleAndCallIdentity:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Print SDLC environment
+        run: |
+          echo "SDLC_ENV: ${{ env.SDLC_ENV }}"
 
-      - name: Configure AWS credentials and Assume Role
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+          
+      - name: Configure AWS credentials and assume role based on environment
+        uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
-          role-to-assume: arn:aws:iam::958686716208:role/testforgithubactions  # Change to reflect your IAM role’s ARN
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.SDLC_ENV == 'prod' && secrets.AWS_ARN_ROLE_PROD || secrets.AWS_ARN_ROLE_DEV }}
+          aws-region: ${{ env.SDLC_ENV == 'prod' && secrets.AWS_REGION_PROD_PRIMARY || secrets.AWS_REGION_DEV_PRIMARY }}
+          
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
 
-      - name: Deploy CloudFormation stack
+      - name: Install AWS CDK CLI dependencies
         run: |
+          pip install --upgrade pip
+          pip install aws-cdk-lib
+          npm install -g aws-cdk
 
-          aws cloudformation deploy \
-            --template-file template.yml \
-            --stack-name event-sqs \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-
-      - name: Get SQS queue ARN
-        run: |
-            queue_arn=$(aws cloudformation describe-stacks \
-              --stack-name event-sqs \
-              --query 'Stacks[0].Outputs[?OutputKey==`SQSqueueARN`].OutputValue' \
-              --output text)
-            echo "SQS Queue ARN: $queue_arn"
-
+      
